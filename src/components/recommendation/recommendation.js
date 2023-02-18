@@ -3,6 +3,8 @@ import axios from "axios";
 import { BrowserRouter as Router, Route, Link} from "react-router-dom";
 import Navbar from '../navbar/navbar'
 import './recommendation.css'
+import HorizontalScroll from 'react-horizontal-scrolling'
+
 class recommendation extends Component{
 
     constructor(props){
@@ -25,19 +27,19 @@ class recommendation extends Component{
             <div>
                 <h1>Recommended books for you</h1>
             </div>
-            <div className="container">
+            <HorizontalScroll className="con">
                 {this.state.RecommendedBooks.map((e)=>{
                     return(
-                        <div className="books"> 
+                        <span className="Allbooks"> 
                             <h3>{e.bookName}</h3>
                             <h3>{e.category}</h3>
                             <h3>{e.publisher}</h3>
                             <h3>{e.author}</h3>
                             <Link to={{pathname: `/libraryDetails/`+e.bookShopeID+"/"+e.category+"/"+this.state.email}} ><span>See libraryDetails</span></Link> 
-                        </div>
+                        </span>
                     )
                 })}
-            </div>
+            </HorizontalScroll>
             </div> 
         )
     }

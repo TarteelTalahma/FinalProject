@@ -4,6 +4,7 @@ import "./StyleLibraryDetails.css"
 import Navbar from '../navbar/navbar'
 import userDetails from "../signIn/userDetails";
 import Footer from "../Footer/Footer";
+import AdminNavbar from '../AdminNavbar/AdminNavbar'
 class libraryDetails extends Component{
 
     constructor(){
@@ -20,18 +21,17 @@ class libraryDetails extends Component{
             this.setState({libraryDetails: Result.data})
     })
 
-    console.log(this.props.match.params.email)
     const obj ={email:this.props.match.params.email,categoryName:this.props.match.params.category}
 
 
-    axios.get(`http://localhost:3000/recommendation?email=${this.props.match.params.email}&categoryName=${this.props.match.params.category}`).then((Result)=>{
+    axios.get(`http://localhost:3000/recommendation?email=${localStorage.getItem("email")}&categoryName=${this.props.match.params.category}`).then((Result)=>{
     console.log(this.props.match.params.category)
     })
     }
 
     render(){
         return(<div>
-            <div><Navbar/></div>
+            {localStorage.getItem("isAdmin")? <AdminNavbar/>: <Navbar/>}
             {this.state.libraryDetails.map((e)=>{
       return(<div><h1>libraryDetails</h1>
                     <h1>{e.bookShopeName}</h1>

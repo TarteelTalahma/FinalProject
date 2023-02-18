@@ -31,6 +31,7 @@ class adminSginIN extends Component{
     }).then((res) => res.json()).then((data) => {
         console.log(data, "adminSginIN")
             alert("Login Successful");
+            localStorage.setItem("isAdmin", true)
             window.localStorage.setItem("adminToken", data.data);
             window.location.href = "adminHomePage"
     })

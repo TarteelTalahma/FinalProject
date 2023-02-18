@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import Navbar from '../navbar/navbar'
+import AdminNavbar from "../AdminNavbar/AdminNavbar";
 import './about.css'
 class about extends Component{
     render(){
         return(
             <div>
               <div>
-                <Navbar/>
+              {localStorage.getItem("isAdmin")? <AdminNavbar/>: <Navbar/>}
                 </div>  
            <div className="about-section">
             <p className="about-info">About us We are a group of Birzeit University students which conducted a graduation project on a special website

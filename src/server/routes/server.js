@@ -102,10 +102,18 @@ app.get("/books", (err, res) => {
 });
 
 app.get("/categories",async (req, res) => {
-  const category =await books.aggregate([
+   const category =await books.aggregate([
     {$group:{_id :"$category"}}
   ])
     res.send(category);
+})
+
+app.get("/showCategories",async (req, res) => {
+  let category =await books.aggregate([
+   {$group:{_id :"$category"}}
+ ])
+ category = category.map((e)=> e._id)
+   res.send(category);
 })
 
 app.get("/categoriesWithBooks", async(req, res) => {
@@ -278,6 +286,13 @@ app.get('/search', async(req, res) => {
   searchResults = await books.find({})
   searchResults = searchResults.filter(result => result.bookName.includes(searchTerm));
   res.json(searchResults);
+});
+
+
+app.delete("/deleteBook/:id", (req, res) => {
+  idToDelete = req.params.id;
+  bookshops.deleteOne({ _id: idToDelete }, function (err) {});
+  res.end();
 });
 
 app.listen(port, function () {

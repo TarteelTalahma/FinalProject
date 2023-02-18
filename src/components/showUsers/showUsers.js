@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { Component } from "react";
 import Navbar from '../navbar/navbar'
 import './showUsers.css'
+import AdminNavbar  from '../AdminNavbar/AdminNavbar'
 class showUsers extends Component{
 
     constructor(){
@@ -18,7 +19,7 @@ class showUsers extends Component{
         return(
             <div>
               <div>
-                <Navbar/>
+              {localStorage.getItem("isAdmin")? <AdminNavbar/>: <Navbar/>}
                 </div>  
                 <div>
                     {this.state.users.map((e)=>{

@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import Navbar from '../navbar/navbar'
 import './contact.css'
+import AdminNavbar from "../AdminNavbar/AdminNavbar";
 class contact extends Component{
     render(){
         return(
             <div>
               <div>
-                <Navbar/>
+              {localStorage.getItem("isAdmin")? <AdminNavbar/>: <Navbar/>}
                 </div>  
            
             <div>

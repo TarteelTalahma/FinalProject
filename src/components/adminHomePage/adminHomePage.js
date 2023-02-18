@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link, Routes, NavLink} from "react-router-dom";
 import Navbar from '../navbar/navbar'
 import './adminHomePage.css'
+import AdminNavbar from "../AdminNavbar/AdminNavbar";
 class adminHomePage extends Component{
     constructor(){
         super();
@@ -32,7 +33,7 @@ class adminHomePage extends Component{
         return(
             <div>
               <div>
-                <Navbar/>
+              {localStorage.getItem("isAdmin")? <AdminNavbar/>: <Navbar/>}
                 </div>  
                 <div><Link className="a" to="/addAdmin">ADD NEW ADMIN</Link></div>
                 <div><Link className="a" to="/addBook">ADD NEW BOOK</Link></div>

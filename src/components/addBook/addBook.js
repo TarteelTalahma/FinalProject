@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./addBook.css"
 import Navbar from "../navbar/navbar";
+import AdminNavbar from "../AdminNavbar/AdminNavbar";
 class addBook extends Component{
 
     constructor(props){
@@ -45,7 +46,7 @@ class addBook extends Component{
         return(
             <div>
                 <div>
-                    <Navbar/>
+                {localStorage.getItem("isAdmin")? <AdminNavbar/>: <Navbar/>}
                 </div>
             <div className="container">
             <form className="form" onSubmit={this.handleSubmit}>

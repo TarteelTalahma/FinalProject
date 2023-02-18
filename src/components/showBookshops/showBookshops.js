@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { Component } from "react";
 import Navbar from '../navbar/navbar'
 import './showBookshops.css'
+import AdminNavbar from '../AdminNavbar/AdminNavbar'
 class showBookshops extends Component{
 
     constructor(){
@@ -17,7 +18,7 @@ class showBookshops extends Component{
     render(){
         return(
             <div>
-              <div><Navbar/></div> 
+              {localStorage.getItem("isAdmin")? <AdminNavbar/>: <Navbar/>}
               <div>{this.state.bookshops.map((e)=>{
                 return(
                     <div>

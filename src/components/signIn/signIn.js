@@ -33,6 +33,7 @@ class signIn extends Component{
     }).then((res) => res.json()).then((data) => {
         console.log(data, "userSginIN")
             alert("Login Successful");
+            localStorage.setItem("isAdmin", false)
             window.localStorage.setItem("token", data.data);
             window.location.href = "userHomePage"
         

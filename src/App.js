@@ -21,6 +21,8 @@ import deleteBook from "./components/deleteBook/deleteBook";
 import recommendation from "./components/recommendation/recommendation";
 import search from "./components/search/search";
 import Footer from "./components/Footer/Footer";
+import AdminNavbar from "./components/AdminNavbar/AdminNavbar";
+import searchOutput from "./components/searchOutput/searchOutput";
 class App extends Component {
 
   constructor(){
@@ -62,6 +64,8 @@ class App extends Component {
               <Route exact path='/recommendation' component={recommendation}/>
               <Route exact path='/search' component={search}/>
               <Route exact path='/Footer' component={Footer}/>
+              <Route exact path='/AdminNavbar' component={AdminNavbar}/>
+              <Route exact path='/searchOutput' component={searchOutput}/>
           </div>
         </div>
       </div>

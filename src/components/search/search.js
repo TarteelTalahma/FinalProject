@@ -1,3 +1,4 @@
+import { json } from 'body-parser';
 import React, { useState } from 'react';
 
 function Search() {
@@ -13,6 +14,9 @@ function Search() {
     const response = await fetch(`http://localhost:3000/search?q=${searchTerm}`);
     const data = await response.json();
     setSearchResults(data);
+    console.log(data)
+    localStorage.setItem("searchResult", JSON.stringify(data))
+    window.location.href = "searchOutput"
   };
 
   return (
@@ -26,13 +30,6 @@ function Search() {
         />
         <button type="submit">Search</button>
       </form>
-      {searchResults.length > 0 && (
-        <ul>
-          {searchResults.map(result => (
-            <li key={result.id}>{result.bookName}</li>
-          ))}
-        </ul>
-      )}
     </div>
   );
 }

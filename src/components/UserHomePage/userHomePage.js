@@ -7,6 +7,9 @@ import Categories from '../Categories/Categories'
 import Navbar from '../navbar/navbar'
 import Search from "../search/search";
 import Footer from "../Footer/Footer";
+import HorizontalScroll from 'react-horizontal-scrolling'
+
+
 class userHomePage extends Component{
     constructor(){
         super();
@@ -18,8 +21,10 @@ class userHomePage extends Component{
                 categories: []
             }
 
-            axios.get("http://localhost:3000/categories").then((Result)=>{
-                this.setState({categories: Result.data})})
+            axios.get("http://localhost:3000/showCategories").then((Result)=>{
+                this.setState({categories: Result.data}) 
+
+            })
             axios.get("http://localhost:3000/books").then((Result)=>{
                 this.setState({books: Result.data})})
     }
@@ -51,6 +56,7 @@ class userHomePage extends Component{
                 console.log(data, "userData")
                 this.setState({flag: true})
                 this.setState({userData: data.data})
+                localStorage.setItem("email", data.data.email)
         })
     }
    
@@ -58,25 +64,31 @@ class userHomePage extends Component{
         return(
             <div>
                 <div>
-                    <Navbar/>
+                {this.state.flag?<Navbar props={{email: this.state.userData.email}}/> : null}
                 </div>
-                <div>
+                <HorizontalScroll>
                     {this.state.flag?<Recommendation props={{email: this.state.userData.email}}/> : null}
-                </div>
-                 
-                       
-                <div className="container">
-                <h1>اللغة العربية والأدب</h1>    
-                {this.state.books.filter((i)=>{return i.category=="اللغة العربية والأدب"}).map((e)=>{ 
-                     return(<div className="books">
-                     <h1>{e.bookName}</h1>
-                     <h1>{e.category}</h1>
-                     <h1>{e.publisher}</h1>
-                     <h1>{e.author}</h1>
-                     <Link to={{pathname: `/libraryDetails/`+e.bookShopeID+"/"+e.category+"/"+this.state.userData.email}} ><span>See libraryDetails</span></Link> 
-                     </div>)
-            })}
-            </div> 
+                </HorizontalScroll>
+
+            <div>
+               {this.state.categories.map((z)=>{
+                return(<div>
+                    {z}
+                    {(this.state.books.filter((i)=>
+                {return i.category== z}).map((e)=>{ 
+                 return(<div className="books">
+                 <h1>{e.bookName}</h1>
+                 <h1>{e.category}</h1>
+                 <h1>{e.publisher}</h1>
+                 <h1>{e.author}</h1>
+                 <Link to={{pathname: `/libraryDetails/`+e.bookShopeID+"/"+e.category+"/"+this.state.userData.email}} ><span>See libraryDetails</span></Link> 
+                 </div>)
+                      
+        })) }
+                </div>)  
+               })}
+            </div>
+
             </div>
 
         )
