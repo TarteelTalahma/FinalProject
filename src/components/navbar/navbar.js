@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./navbar.css"
 import { BrowserRouter as Router, Route, Link, NavLink} from "react-router-dom";
+import Search from "../search/search";
 class navbar extends Component{
 
     logOut=()=>{
@@ -13,6 +14,7 @@ class navbar extends Component{
             <nav className="nav">
                 <a href='#' className="nav__brand">Ramallah Bookshops</a>
                 <ul className="nav__menu">
+                    <li className="nav__item"><Search/></li>
                     <li className="nav__item"><Link to='/userHomePage' className="nav__link">Home</Link></li>
                     <li className="nav__item"><Link to='/Categories' className="nav__link">Categories</Link></li>
                     <li className="nav__item"><Link to='/userHomePage' className="nav__link">Books</Link></li>

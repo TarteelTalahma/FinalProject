@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { BrowserRouter as Router, Route, Link, Routes, NavLink} from "react-router-dom";
 import Navbar from '../navbar/navbar'
 import './adminHomePage.css'
 class adminHomePage extends Component{
@@ -33,8 +34,12 @@ class adminHomePage extends Component{
               <div>
                 <Navbar/>
                 </div>  
-           
-            <div><h1>admin home page</h1></div>
+                <div><Link className="a" to="/addAdmin">ADD NEW ADMIN</Link></div>
+                <div><Link className="a" to="/addBook">ADD NEW BOOK</Link></div>
+                <div><Link className="a" to="/addBookshop">ADD NEW BOOKSHOP</Link></div>
+                <div><Link className="a" to="/showUsers">SHOW ALL USERS</Link></div>
+                <div><Link className="a" to="/showBookshops">SHOW ALL BOOKSHOPS</Link></div>
+                <div><Link className="a" to="/deleteBook">DELETE SPICIFIC BOOK</Link></div>
             </div> 
         )
     }

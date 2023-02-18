@@ -2,18 +2,30 @@ import axios from "axios";
 import React, { Component } from "react";
 import "./StyleLibraryDetails.css"
 import Navbar from '../navbar/navbar'
+import userDetails from "../signIn/userDetails";
+import Footer from "../Footer/Footer";
 class libraryDetails extends Component{
 
     constructor(){
         super()
         this.state={
-            libraryDetails:[]
+            libraryDetails:[],
+            DetailsUser:[]
         }
     }
 
     componentDidMount=()=>{
         axios.get("http://localhost:3000/libraryOfBook/"+this.props.match.params.id).then((Result)=>{
+            console.log(this.props.match.params.category)
             this.setState({libraryDetails: Result.data})
+    })
+
+    console.log(this.props.match.params.email)
+    const obj ={email:this.props.match.params.email,categoryName:this.props.match.params.category}
+
+
+    axios.get(`http://localhost:3000/recommendation?email=${this.props.match.params.email}&categoryName=${this.props.match.params.category}`).then((Result)=>{
+    console.log(this.props.match.params.category)
     })
     }
 
@@ -28,7 +40,6 @@ class libraryDetails extends Component{
                     <h1>{e.email}</h1>
             </div>)
             })}
-           
             </div>)
     }
 }

@@ -6,7 +6,8 @@ const UserSchema = new Schema({
 firstName: String,
 lastName: String,
 email: { type: String, unique: true},
-password: String
+password: String,
+recommendation: [{name:"", count:""}]
 });
 
 const Users = mongoose.model("Users", UserSchema);

@@ -8,10 +8,13 @@ const path = require("path");
 const users = require("../model/userSchema");
 const books = require("../model/bookSchema");
 const bookshops = require("../model/bookshopSchema");
+const admins = require("../model/adminSchema")
 const cors = require("cors");
 const app = express();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { assert, count } = require("console");
+const { findOne } = require("../model/userSchema");
 const JWT_SECRET ="DUSIGFILSDIUGSNIJLSDIGFUEJLWHIODWEKLWEHIUDHSLND";
 app.use(cors());
 app.use(express.json());
@@ -44,6 +47,8 @@ app.post("/register", async(req, res) =>{
       lastName,
       email,
       password: encryptedPassword,
+      recommendation:[{name:"" , count:0}]
+
     })
     res.send({status: "ok"})
   } catch (error) {
@@ -71,9 +76,9 @@ app.post("/loginUser", async(req, res) =>{
 })
 
 
-app.post("/adminLoginUser", async(req, res) =>{
+app.post("/adminLogin", async(req, res) =>{
   const {email, password} = req.body;
-  const admin = await bookshops.findOne({email});
+  const admin = await admins.findOne({email});
   if(!admin){
     return res.json({error: "admin Not Found"})
   }
@@ -128,14 +133,7 @@ app.get("/categories/:name",async (req, response) => {
   response.send(res)
  })
 })
-/*app.get("/libraryOfBook/:NameOfBook",async (req , response)=>{
-  const NameOfBook= req.params.NameOfBook;
-    const book =  books.findOne({bookName: NameOfBook}, (err,res)=>{
-    bookshops.findOne({bookShopeID: res.bookShopeID}, (err,result)=>{
-      response.send(result);
-    })
-  })
-})*/
+
 
 app.get("/libraryOfBook/:bookShopId",async (req , response)=>{
   const IdOfbookShop= req.params.bookShopId;
@@ -164,7 +162,7 @@ app.post("/adminData", async(req, res)=>{
   try {
     const admin = jwt.verify(token, JWT_SECRET);
     const adminEmail = admin.email;
-    bookshops.findOne({email: adminEmail}).then((data)=>{
+    admins.findOne({email: adminEmail}).then((data)=>{
       res.send({status: "ok", data: data});
     }).catch((error)=>{
       res.send({status: "error", data: error})
@@ -172,6 +170,115 @@ app.post("/adminData", async(req, res)=>{
   } catch (error) {
   }
 })
+
+app.get("/users", (err, res) => {
+  users.find({}).exec(function (err, result) {
+    res.send(result);
+  });
+});
+
+app.get("/bookshops", (err, res) => {
+  bookshops.find({}).exec(function (err, result) {
+    res.send(result);
+  });
+});
+
+app.post("/addBook", async(req, res) =>{
+  const {bookName, category, publisher, author, bookShopeID} = req.body;
+  try {
+    await books.create({
+      bookName,
+      category,
+      publisher,
+      author,
+      bookShopeID,
+    })
+    res.send({status: "ok"})
+  } catch (error) {
+    res.send({status: "ok"})
+  }
+})
+
+app.post("/addBookshop", async(req, res) =>{
+  const {bookShopeID, bookShopeName, address, phoneNumber, email} = req.body;
+  try {
+    await bookshops.create({
+      bookShopeID, 
+      bookShopeName, 
+      address, 
+      phoneNumber, 
+      email,
+    })
+    res.send({status: "ok"})
+  } catch (error) {
+    res.send({status: "ok"})
+  }
+})
+
+app.post("/addAdmin", async(req, res) =>{
+  const {email, password} = req.body;
+  const encryptedPassword = await bcrypt.hash(password, 10);
+  try {
+    const oldAdmin = await admins.findOne({email});
+    if(oldAdmin){
+      return res.json({error: "admin Exists"})
+    }
+    await admins.create({
+      email,
+      password: encryptedPassword,
+    })
+    res.send({status: "ok"})
+  } catch (error) {
+    res.send({status: "ok"})
+  }
+})
+
+app.get(("/recommendation"),  async (req,response)=>{
+  let count2 = 0;
+  users.findOne({email: req.query.email}).
+  then(async (value)=>{
+let rec =value.recommendation
+    console.log(value)
+    if(value.recommendation.length==0){
+rec.push({name:req.query.categoryName, count: 1})
+
+  console.log(value)
+  }
+else if(value.recommendation.find((q)=>q.name==req.query.categoryName)==undefined)
+rec.push({name:req.query.categoryName, count: 1})
+
+else{
+    value.recommendation.forEach(e=>{
+      if(e.name==req.query.categoryName){
+       e.count=e.count+1
+        }
+  })
+  }
+    const user = await users.findOneAndUpdate({email: req.query.email},{recommendation:rec})})
+   response.end() 
+})
+
+app.get(("/recommendedBooks/:email"), async(req,res)=>{
+  let user = await users.find({email: req.params.email});
+  let recommendedBook = user[0].recommendation;
+  recommendedBook.sort((a,b)=>a.count-b.count)
+  console.log(recommendedBook[recommendedBook.length-1])
+  let allRecBooks1 = await books.find({category: recommendedBook[recommendedBook.length-1].name}).limit(3);
+  let allRecBooks2 = await books.find({category: recommendedBook[recommendedBook.length-2].name}).limit(2);
+  let allRecBooks3 = await books.find({category: recommendedBook[recommendedBook.length-3].name}).limit(1);
+  console.log(recommendedBook)
+  allRecBooks1 = [...allRecBooks1, ...allRecBooks2, ...allRecBooks3]
+  res.send({recommendation: allRecBooks1});
+})
+
+
+
+app.get('/search', async(req, res) => {
+  const searchTerm = req.query.q;
+  searchResults = await books.find({})
+  searchResults = searchResults.filter(result => result.bookName.includes(searchTerm));
+  res.json(searchResults);
+});
 
 app.listen(port, function () {
   console.log(`Server running in port${port}`);

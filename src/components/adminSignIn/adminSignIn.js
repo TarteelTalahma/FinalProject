@@ -16,7 +16,7 @@ class adminSginIN extends Component{
     e.preventDefault();
     const {email, password} = this.state;
     console.log(email, password);
-    fetch("http://localhost:3000/adminLoginUser",{
+    fetch("http://localhost:3000/adminLogin",{
         method: "POST",
         crossDomain: true,
         headers: {
